@@ -1,9 +1,15 @@
 # Virtual environments
 .venv/
+.venv*/
 
 # Python cache
 __pycache__/
 *.py[cod]
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
 
 # Generated output PDFs
 *_ocr.pdf
