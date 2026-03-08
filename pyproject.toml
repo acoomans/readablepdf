@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "readablepdf"
+version = "0.1.0"
+description = "Turn image-only PDFs into searchable, selectable PDFs with an OCR text layer"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Arnaud" }]
+license = { text = "MIT" }
+dependencies = [
+  "pdf2image>=1.17.0",
+  "pypdf>=6.0.0",
+]
+keywords = ["pdf", "ocr", "tesseract", "poppler"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/readablepdf"
+Repository = "https://github.com/your-org/readablepdf"
+Issues = "https://github.com/your-org/readablepdf/issues"
+
+[project.scripts]
+readablepdf = "readablepdf.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/readablepdf"]
