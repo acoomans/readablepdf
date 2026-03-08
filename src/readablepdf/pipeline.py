@@ -12,7 +12,6 @@ from pathlib import Path
 from pdf2image import convert_from_path
 from pypdf import PdfWriter
 
-
 REQUIRED_BINARIES = ("tesseract", "pdftoppm")
 
 

@@ -8,7 +8,9 @@ def test_default_output_path(tmp_path: Path) -> None:
     input_pdf.write_bytes(b"pdf")
     args = pipeline.parse_args([str(input_pdf)])
 
-    output = input_pdf.with_name(f"{input_pdf.stem}_ocr.pdf") if args.output is None else args.output
+    output = (
+        input_pdf.with_name(f"{input_pdf.stem}_ocr.pdf") if args.output is None else args.output
+    )
     assert output.name == "sample_ocr.pdf"
 
 
