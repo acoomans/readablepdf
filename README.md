@@ -1,35 +1,27 @@
 # readablepdf
 
-This repository contains a script that converts an image-only PDF into a searchable/annotatable PDF.
+`readablepdf` converts image-only PDFs into searchable and selectable PDFs by adding an OCR text layer while preserving page visuals.
 
-It does this by:
-1. Rendering each page to an image (`pdf2image` + Poppler).
-2. Running Tesseract OCR per page in PDF mode (keeps original image + adds invisible text layer).
-3. Merging all OCR-generated page PDFs into one final PDF (`pypdf`).
+## How it works
 
-## Files
+1. Render each page to a PNG (`pdf2image` backed by Poppler).
+2. OCR each page with Tesseract in PDF mode (image layer + invisible text layer).
+3. Merge all OCR page PDFs into one output PDF.
 
-- `ocr_pdf.py`: main automation script.
-- `requirements.txt`: Python dependencies.
-- `.gitignore`: ignores generated files and virtual env files.
+All intermediate files are written inside an OS temporary directory and removed automatically.
 
-## Prerequisites
+## System dependencies (Linux + macOS)
 
-### System packages
+You need these binaries on the machine where you run `readablepdf`:
 
-Install Tesseract OCR and Poppler utilities.
+- `tesseract`
+- `pdftoppm` (from Poppler)
 
 Ubuntu/Debian:
 
 ```bash
 sudo apt update
-sudo apt install -y tesseract-ocr poppler-utils python3-venv
-```
-
-If your PDF language is not English, also install the matching Tesseract language package(s), for example:
-
-```bash
-sudo apt install -y tesseract-ocr-fra
+sudo apt install -y tesseract-ocr poppler-utils
 ```
 
 macOS (Homebrew):
@@ -38,41 +30,48 @@ macOS (Homebrew):
 brew install tesseract poppler
 ```
 
-### Python environment
+If you need languages beyond English, install matching Tesseract language packs.
 
-From this folder:
+## Install and run with pipx
+
+Once published on PyPI, you can run it directly without managing a virtualenv:
+
+```bash
+pipx run readablepdf input.pdf
+```
+
+Custom output/language/DPI:
+
+```bash
+pipx run readablepdf input.pdf -o output_ocr.pdf --lang eng --dpi 200
+```
+
+## Local development
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -e .[dev]
+ruff check .
+ruff format --check .
+pytest -q
+python -m build
 ```
 
-## Usage
+## GitHub Actions
 
-Basic usage (creates `<input_stem>_ocr.pdf` next to input):
+- `CI` workflow: lint + format check + tests + build on Ubuntu and macOS.
+- `Publish to PyPI` workflow: runs on GitHub Release publish (and manual trigger).
 
-```bash
-python ocr_pdf.py input.pdf
-```
+### GitHub configuration needed for publish
 
-Custom output:
+1. Create repository secret: `PYPI_API_TOKEN`.
+2. Set it to a PyPI API token with upload permission for this project.
+3. (Optional but recommended) create a protected environment named `pypi` and require approvals.
 
-```bash
-python ocr_pdf.py input.pdf -o output_ocr.pdf
-```
+## Release flow
 
-Custom OCR options:
-
-```bash
-python ocr_pdf.py input.pdf --dpi 200 --lang eng
-```
-
-- `--dpi` controls the rendered image quality used for OCR.
-- `--lang` is the Tesseract language string (examples: `eng`, `eng+fra`).
-
-## Notes
-
-- Higher DPI may improve OCR quality but increases processing time and output size.
-- The script checks that `tesseract` and `pdftoppm` are installed before running.
-- If you prefer a single external tool, `ocrmypdf --skip-text input.pdf output.pdf` is an alternative.
+1. Bump `version` in `pyproject.toml` and `src/readablepdf/__init__.py`.
+2. Merge to `main`.
+3. Create a GitHub Release tag (for example `v0.1.1`).
+4. `Publish to PyPI` workflow uploads artifacts to PyPI.
