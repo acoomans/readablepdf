@@ -23,11 +23,6 @@ classifiers = [
   "Operating System :: MacOS",
 ]
 
-[project.urls]
-Homepage = "https://github.com/your-org/readablepdf"
-Repository = "https://github.com/your-org/readablepdf"
-Issues = "https://github.com/your-org/readablepdf/issues"
-
 [project.scripts]
 readablepdf = "readablepdf.cli:main"
 
