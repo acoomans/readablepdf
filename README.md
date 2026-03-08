@@ -71,7 +71,7 @@ python -m build
 
 ## Release flow
 
-1. Bump `version` in `pyproject.toml` and `src/readablepdf/__init__.py`.
+1. Bump `__version__` in `src/readablepdf/__about__.py`.
 2. Merge to `main`.
 3. Create a GitHub Release tag (for example `v0.1.1`).
 4. `Publish to PyPI` workflow uploads artifacts to PyPI.
