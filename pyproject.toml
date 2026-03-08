@@ -33,3 +33,8 @@ readablepdf = "readablepdf.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/readablepdf"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
