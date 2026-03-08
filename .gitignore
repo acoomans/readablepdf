@@ -1,0 +1,15 @@
+# Virtual environments
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Generated output PDFs
+*_ocr.pdf
+
+# OCR temp leftovers (if any)
+/tmp/ocr_pdf_*
+
+# Original PDF(s)
+*.pdf
