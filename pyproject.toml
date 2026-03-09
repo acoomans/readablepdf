@@ -38,6 +38,7 @@ fallback_version = "0.0.0"
 [project.optional-dependencies]
 dev = [
   "build>=1.2.0",
+  "pre-commit>=3.7.0",
   "pytest>=8.0.0",
   "ruff>=0.11.0",
 ]
