@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import platform
 import shutil
 import subprocess
 import sys
@@ -44,11 +45,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def ensure_dependencies() -> None:
     missing = [binary for binary in REQUIRED_BINARIES if shutil.which(binary) is None]
     if missing:
-        raise RuntimeError(
+        error_msg = (
             "Missing required system binaries: "
             + ", ".join(missing)
-            + ". Install Tesseract OCR and Poppler."
+            + ". Install Tesseract OCR and Poppler.\n"
         )
+
+        # Add OS-specific installation instructions
+        system = platform.system()
+        if system == "Linux":
+            # Detect package manager
+            if shutil.which("apt-get"):
+                error_msg += "\nInstall with:\n  sudo apt-get install tesseract-ocr poppler-utils"
+            elif shutil.which("dnf"):
+                error_msg += "\nInstall with:\n  sudo dnf install tesseract poppler-utils"
+            elif shutil.which("yum"):
+                error_msg += "\nInstall with:\n  sudo yum install tesseract poppler-utils"
+            else:
+                error_msg += "\nInstall tesseract-ocr and poppler-utils using your package manager"
+        elif system == "Darwin":  # macOS
+            error_msg += "\nOn macOS:\n  brew install tesseract poppler"
+        elif system == "Windows":
+            error_msg += "\nOn Windows:\n  choco install tesseract poppler\n  (or download from https://github.com/UB-Mannheim/tesseract/wiki)"
+
+        raise RuntimeError(error_msg)
 
 
 def run_tesseract(image_path: Path, output_base: Path, lang: str) -> Path:
