@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.25"]
+requires = ["hatchling>=1.25", "hatch-vcs>=0.4.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -30,7 +30,10 @@ readablepdf = "readablepdf.cli:main"
 packages = ["src/readablepdf"]
 
 [tool.hatch.version]
-path = "src/readablepdf/__about__.py"
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+fallback_version = "0.0.0"
 
 [project.optional-dependencies]
 dev = [
